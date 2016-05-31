@@ -52,15 +52,15 @@ namespace GFW.Sharp.Test
             //System.Net.Sockets.TcpListener serverlistener = new System.Net.Sockets.TcpListener(IPAddress.Parse("127.0.0.1"),4567);
             //serverlistener.Start();
             //ListenServer(serverlistener);
-            Socket serverSocket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+            Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             serverSocket.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 4567));
-            serverSocket.Listen(1024);
+            serverSocket.Listen(5);
             ListenServer(serverSocket);
 
-            Socket clientSocket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-            clientSocket.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1234));
-            clientSocket.Listen(10);
-            ListenClient(clientSocket);
+            //Socket clientSocket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+            //clientSocket.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1234));
+            //clientSocket.Listen(100);
+            //ListenClient(clientSocket);
 
 
             Console.ReadLine();
@@ -73,22 +73,26 @@ namespace GFW.Sharp.Test
             {
                 ListenServer(listener);
                 var clientSocket = listener.EndAccept(ar);
-                clientSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+                //clientSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
                 //clientSocket.SendTimeout = 180000;
+                //clientSocket.ReceiveTimeout = 180000;
 
-                Socket proxySocket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+                Socket proxySocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 proxySocket.Connect(IPAddress.Parse("192.168.1.200"), 8500);
                 //proxySocket.SendTimeout = 180000;
-                proxySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+                //proxySocket.ReceiveTimeout = 180000;
+                //proxySocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
 
                 {
-                    DecryptForwardWorker forwardToProxy = new DecryptForwardWorker(clientSocket, proxySocket, key);
+                    TransparentForwardWorker forwardToProxy = new TransparentForwardWorker(clientSocket, proxySocket, key);
                     forwardToProxy.Start();
 
-                    EncryptForwardWorker forwardToClient = new EncryptForwardWorker(proxySocket, clientSocket, key);
+                    TransparentForwardWorker forwardToClient = new TransparentForwardWorker(proxySocket, clientSocket, key);
                     forwardToClient.Start();
                 }
+                
             }), null);
+
         }
 
         public static void ListenClient(Socket listener)
@@ -98,11 +102,12 @@ namespace GFW.Sharp.Test
                 ListenClient(listener);
                 var localSocket = listener.EndAccept(ar);
                 localSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
-                //localSocket.SendTimeout = 180000;
-
+                localSocket.SendTimeout = 180000;
+                localSocket.ReceiveTimeout = 180000;
                 Socket serverSocket = new Socket(SocketType.Stream, ProtocolType.Tcp);
                 serverSocket.Connect(IPAddress.Parse("127.0.0.1"), 4567);
-                //serverSocket.SendTimeout = 180000;
+                serverSocket.SendTimeout = 180000;
+                serverSocket.ReceiveTimeout = 180000;
                 serverSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
 
                 {
