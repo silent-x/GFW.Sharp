@@ -61,7 +61,7 @@ namespace GFW.Sharp.Core.Forward.Transparent
                 }
             }
             catch { }
-            Dispose();
+            Dispose(); 
         }
     }
 }
