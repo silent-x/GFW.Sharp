@@ -1,5 +1,6 @@
 ﻿using GFW.Sharp.Core.Ciphering;
-using GFW.Sharp.Core.Worker;
+using GFW.Sharp.Core.Forward.Transparent;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -52,21 +53,25 @@ namespace GFW.Sharp.Test
             //System.Net.Sockets.TcpListener serverlistener = new System.Net.Sockets.TcpListener(IPAddress.Parse("127.0.0.1"),4567);
             //serverlistener.Start();
             //ListenServer(serverlistener);
-            Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            serverSocket.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 4567));
-            serverSocket.Listen(5);
-            ListenServer(serverSocket);
+            //Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            //serverSocket.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 4567));
+            //serverSocket.Listen(5);
+            //ListenServer(serverSocket);
 
             //Socket clientSocket = new Socket(SocketType.Stream, ProtocolType.Tcp);
             //clientSocket.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1234));
             //clientSocket.Listen(100);
             //ListenClient(clientSocket);
 
-
+            ForwarderListener server = new ForwarderListener(IPAddress.Parse("127.0.0.1"), 4567, IPAddress.Parse("192.168.1.200"), 8500);
+            server.Start();
+            ForwarderListener client = new ForwarderListener(IPAddress.Parse("127.0.0.1"), 1234, IPAddress.Parse("127.0.0.1"), 4567);
+            client.Start();
+            //listenerRx.Start();
             Console.ReadLine();
 
         }
-
+        /*
         public static void ListenServer(Socket listener)
         {
             listener.BeginAccept(new AsyncCallback(ar =>
@@ -119,6 +124,7 @@ namespace GFW.Sharp.Test
                 }
             }), null);
         }
+        */
 
         public static byte[] DecryptNet(SecretKey key, byte[] bytes)
         {

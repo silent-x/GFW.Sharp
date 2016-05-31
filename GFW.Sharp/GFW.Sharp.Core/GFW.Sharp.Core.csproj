@@ -46,7 +46,15 @@
   <ItemGroup>
     <Compile Include="Ciphering\Encrypt.cs" />
     <Compile Include="Ciphering\SecretKey.cs" />
+    <Compile Include="Forward\Forwarder.cs" />
+    <Compile Include="Forward\Listener.cs" />
+    <Compile Include="Forward\Transparent\TransparentForwarder.cs" />
+    <Compile Include="Forward\Transparent\ForwarderListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proxy\Client.cs" />
+    <Compile Include="Proxy\Listener.cs" />
+    <Compile Include="Proxy\PortMap\PortMapClient.cs" />
+    <Compile Include="Proxy\PortMap\PortMapListener.cs" />
     <Compile Include="Util\Logger.cs" />
     <Compile Include="Worker\DecryptForwardWorker.cs" />
     <Compile Include="Worker\EncryptForwardWorker.cs" />
