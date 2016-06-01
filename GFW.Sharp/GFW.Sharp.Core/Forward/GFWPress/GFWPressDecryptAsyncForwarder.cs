@@ -26,11 +26,11 @@ namespace GFW.Sharp.Core.Forward.GFWPress
         {
             try
             {
-                _clientStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback(this.OnClientReceive), _clientStream);
+                _clientStream.BeginRead(_buffer, 0, _buffer.Length, new AsyncCallback(this.OnClientReceive), _clientStream);
             }
             catch
             {
-                //Dispose();
+                Dispose();
             }
         }
         ///<summary>Called when we have received data from the local client.<br>Incoming data will immediately be forwarded to the remote host.</br></summary>
@@ -46,17 +46,18 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                     return;
                 }
                 byte[] recv = new byte[Ret];
-                System.Array.Copy(Buffer, 0, recv, 0, recv.Length);
+                System.Array.Copy(_buffer, 0, recv, 0, recv.Length);
                 byte[] decrypted = recv;
-
+                recv = null;
                 //_aes.encryptNet(_key, recv);
 
 
                 _destinationStream.BeginWrite(decrypted, 0, decrypted.Length, new AsyncCallback(this.OnRemoteSent), _destinationStream);
+                decrypted = null;
             }
             catch
             {
-                //Dispose();
+                Dispose();
             }
         }
         ///<summary>Called when we have sent data to the remote host.<br>When all the data has been sent, we will start receiving again from the local client.</br></summary>
@@ -68,13 +69,13 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                 int Ret = _destinationStream.EndRead(ar);
                 if (Ret > 0)
                 {
-                    _clientStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback(this.OnClientReceive), ClientSocket);
+                    _clientStream.BeginRead(_buffer, 0, _buffer.Length, new AsyncCallback(this.OnClientReceive), ClientSocket);
                     return;
                 }
             }
             catch
             {
-                //Dispose();
+                Dispose();
             }
 
         }

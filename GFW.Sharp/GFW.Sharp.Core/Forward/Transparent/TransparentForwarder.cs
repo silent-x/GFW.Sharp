@@ -21,7 +21,7 @@ namespace GFW.Sharp.Core.Forward.Transparent
         {
             try
             {
-                ClientSocket.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, new AsyncCallback(this.OnClientReceive), ClientSocket);
+                ClientSocket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(this.OnClientReceive), ClientSocket);
             }
             catch
             {
@@ -40,7 +40,7 @@ namespace GFW.Sharp.Core.Forward.Transparent
                     Dispose();
                     return;
                 }
-                DestinationSocket.BeginSend(Buffer, 0, Ret, SocketFlags.None, new AsyncCallback(this.OnRemoteSent), DestinationSocket);
+                DestinationSocket.BeginSend(_buffer, 0, Ret, SocketFlags.None, new AsyncCallback(this.OnRemoteSent), DestinationSocket);
             }
             catch
             {
@@ -56,7 +56,7 @@ namespace GFW.Sharp.Core.Forward.Transparent
                 int Ret = DestinationSocket.EndSend(ar);
                 if (Ret > 0)
                 {
-                    ClientSocket.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, new AsyncCallback(this.OnClientReceive), ClientSocket);
+                    ClientSocket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(this.OnClientReceive), ClientSocket);
                     return;
                 }
             }

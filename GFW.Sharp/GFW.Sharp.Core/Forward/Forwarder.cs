@@ -16,6 +16,7 @@ namespace GFW.Sharp.Core.Forward
     ///<remarks>The Client class provides an abstract base class that represents a connection to a local client and a remote server. Descendant classes further specify the protocol that is used between those two connections.</remarks>
     public abstract class Forwarder : IDisposable
     {
+        protected byte[] _buffer = null;
         // private variables
         /// <summary>Holds the address of the method to call when this client is ready to be destroyed.</summary>
         private DestroyDelegate Destroyer;
@@ -24,7 +25,7 @@ namespace GFW.Sharp.Core.Forward
         /// <summary>Holds the value of the DestinationSocket property.</summary>
         private Socket m_DestinationSocket;
         /// <summary>Holds the value of the Buffer property.</summary>
-        private byte[] m_Buffer = new byte[64*1024]; //0<->4095 = 4096
+        //private byte[] m_Buffer = new byte[64*1024]; //0<->4095 = 4096
         ///<summary>Initializes a new instance of the Client class.</summary>
         ///<param name="ClientSocket">The <see cref ="Socket">Socket</see> connection between this proxy server and the local client.</param>
         ///<param name="Destroyer">The callback method to be called when this Client object disconnects from the local client and the remote server.</param>
@@ -32,6 +33,7 @@ namespace GFW.Sharp.Core.Forward
         {
             this.ClientSocket = ClientSocket;
             this.Destroyer = Destroyer;
+            _buffer = new byte[64 * 1024];
         }
         ///<summary>Initializes a new instance of the Client object.</summary>
         ///<remarks>Both the ClientSocket property and the DestroyDelegate are initialized to null.</remarks>
@@ -39,6 +41,7 @@ namespace GFW.Sharp.Core.Forward
         {
             this.ClientSocket = null;
             this.Destroyer = null;
+            _buffer = new byte[64 * 1024];
         }
         ///<summary>Gets or sets the Socket connection between the proxy server and the local client.</summary>
         ///<value>A Socket instance defining the connection between the proxy server and the local client.</value>
@@ -72,16 +75,7 @@ namespace GFW.Sharp.Core.Forward
                 m_DestinationSocket = value;
             }
         }
-        ///<summary>Gets the buffer to store all the incoming data from the local client.</summary>
-        ///<value>An array of bytes that can be used to store all the incoming data from the local client.</value>
-        ///<seealso cref ="RemoteBuffer"/>
-        protected byte[] Buffer
-        {
-            get
-            {
-                return m_Buffer;
-            }
-        }
+
         ///<summary>Disposes of the resources (other than memory) used by the Client.</summary>
         ///<remarks>Closes the connections with the local client and the remote host. Once <c>Dispose</c> has been called, this object should not be used anymore.</remarks>
         ///<seealso cref ="System.IDisposable"/>
@@ -107,7 +101,8 @@ namespace GFW.Sharp.Core.Forward
             DestinationSocket = null;
             if (Destroyer != null)
                 Destroyer(this);
-            m_Buffer = null;
+            _buffer = null;
+            //GC.Collect();
         }
         ///<summary>Returns text information about this Client object.</summary>
         ///<returns>A string representing this Client object.</returns>

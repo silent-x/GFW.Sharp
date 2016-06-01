@@ -26,7 +26,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
         {
             try
             {
-                _clientStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback(this.OnClientReceive), _clientStream);
+                _clientStream.BeginRead(_buffer, 0, _buffer.Length, new AsyncCallback(this.OnClientReceive), _clientStream);
             }
             catch
             {
@@ -46,13 +46,14 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                     return;
                 }
                 byte[] recv = new byte[Ret];
-                System.Array.Copy(Buffer, 0, recv, 0, recv.Length);
+                System.Array.Copy(_buffer, 0, recv, 0, recv.Length);
                 byte[] encrypted = recv;
-                
+                recv = null;
                 //_aes.encryptNet(_key, recv);
 
 
                 _destinationStream.BeginWrite(encrypted, 0, encrypted.Length, new AsyncCallback(this.OnRemoteSent), _destinationStream);
+                encrypted = null;
             }
             catch
             {
@@ -68,7 +69,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                 int Ret = _destinationStream.EndRead(ar);
                 if (Ret > 0)
                 {
-                    _clientStream.BeginRead(Buffer, 0, Buffer.Length, new AsyncCallback(this.OnClientReceive), ClientSocket);
+                    _clientStream.BeginRead(_buffer, 0, _buffer.Length, new AsyncCallback(this.OnClientReceive), ClientSocket);
                     return;
                 }
             }
