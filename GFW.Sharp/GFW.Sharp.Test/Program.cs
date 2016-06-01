@@ -55,8 +55,8 @@ namespace GFW.Sharp.Test
             SecretKey key = aes.getPasswordKey("Silent*X83");
             Listener server = new GFWPressForwardServerListener(IPAddress.Parse("192.168.1.107"), 4567, IPAddress.Parse("192.168.1.200"), 8500, key);
             server.Start();
-            Listener client = new GFWPressForwardClientListener(IPAddress.Parse("192.168.1.107"), 1234, IPAddress.Parse("192.168.1.107"), 4567, key);
-            client.Start();
+            //Listener client = new GFWPressForwardClientListener(IPAddress.Parse("192.168.1.107"), 1234, IPAddress.Parse("192.168.1.107"), 4567, key);
+            //client.Start();
 
             Console.ReadLine();
 

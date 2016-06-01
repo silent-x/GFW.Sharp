@@ -49,8 +49,10 @@ namespace GFW.Sharp.Core.Forward
                 Socket inputSocket = ListenSocket.EndAccept(ar);
                 if (inputSocket != null)
                 {
+                    //inputSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
                     Socket outputSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                     outputSocket.Connect(MapTo);
+                    //outputSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
                     Forwarder forwarderTx = GetInputToOutputForwarder(inputSocket, outputSocket);
                     Forwarder forwarderRx = GetOutputToInputForwarder(outputSocket, inputSocket);
                     AddClient(forwarderTx);

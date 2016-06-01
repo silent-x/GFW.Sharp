@@ -60,6 +60,7 @@
     <Compile Include="Proxy\Listener.cs" />
     <Compile Include="Proxy\PortMap\PortMapClient.cs" />
     <Compile Include="Proxy\PortMap\PortMapListener.cs" />
+    <Compile Include="Util\Logger.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
