@@ -1,5 +1,5 @@
 ﻿using GFW.Sharp.Core.Ciphering;
-using GFW.Sharp.Core.Util;
+//using GFW.Sharp.Core.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;

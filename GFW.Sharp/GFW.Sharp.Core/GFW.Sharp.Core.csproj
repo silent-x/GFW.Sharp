@@ -55,7 +55,6 @@
     <Compile Include="Proxy\Listener.cs" />
     <Compile Include="Proxy\PortMap\PortMapClient.cs" />
     <Compile Include="Proxy\PortMap\PortMapListener.cs" />
-    <Compile Include="Util\Logger.cs" />
     <Compile Include="Worker\DecryptForwardWorker.cs" />
     <Compile Include="Worker\EncryptForwardWorker.cs" />
     <Compile Include="Worker\TransparentForwardWorker.cs" />
