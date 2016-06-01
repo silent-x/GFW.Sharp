@@ -1179,5 +1179,41 @@ namespace GFW.Sharp.Core.Ciphering
 
         }
 
+        public byte[] simpleEncrypt(byte[] data)
+        {
+            byte[] ret = new byte[data.Length];
+            System.Array.Copy(data, 0, ret, 0, data.Length);
+            for(int i=0;i<ret.Length;i++)
+            {
+                if(ret[i]==255)
+                {
+                    ret[i] = 0;
+                }
+                else
+                {
+                    ret[i] += 1;
+                }
+            }
+            return ret;
+        }
+
+        public byte[] simpleDecrypt(byte[] cipher)
+        {
+            byte[] ret = new byte[cipher.Length];
+            System.Array.Copy(cipher, 0, ret, 0, cipher.Length);
+            for (int i = 0; i < ret.Length; i++)
+            {
+                if (ret[i] == 0)
+                {
+                    ret[i] = 255;
+                }
+                else
+                {
+                    ret[i] -= 1;
+                }
+            }
+            return ret;
+        }
+
     }
 }

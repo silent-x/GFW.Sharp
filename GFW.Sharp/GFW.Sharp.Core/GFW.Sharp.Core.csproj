@@ -49,7 +49,8 @@
     <Compile Include="Forward\Forwarder.cs" />
     <Compile Include="Forward\GFWPress\GFWPressDecryptForwarder.cs" />
     <Compile Include="Forward\GFWPress\GFWPressEncryptForwarder.cs" />
-    <Compile Include="Forward\GFWPress\GFWPressForwardListener.cs" />
+    <Compile Include="Forward\GFWPress\GFWPressForwardClientListener.cs" />
+    <Compile Include="Forward\GFWPress\GFWPressForwardServerListener.cs" />
     <Compile Include="Forward\Listener.cs" />
     <Compile Include="Forward\ForwarderListener.cs" />
     <Compile Include="Forward\Transparent\TransparentForwarder.cs" />

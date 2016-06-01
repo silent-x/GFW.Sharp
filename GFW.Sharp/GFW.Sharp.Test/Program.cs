@@ -1,5 +1,6 @@
 ﻿using GFW.Sharp.Core.Ciphering;
 using GFW.Sharp.Core.Forward;
+using GFW.Sharp.Core.Forward.GFWPress;
 using GFW.Sharp.Core.Forward.Transparent;
 
 using System;
@@ -51,10 +52,10 @@ namespace GFW.Sharp.Test
             //    }
             //}
 
-
-            Listener server = new TransparentForwardListener(IPAddress.Parse("192.168.1.107"), 4567, IPAddress.Parse("192.168.1.200"), 8500);
+            SecretKey key = aes.getPasswordKey("Silent*X83");
+            Listener server = new GFWPressForwardServerListener(IPAddress.Parse("192.168.1.107"), 4567, IPAddress.Parse("192.168.1.200"), 8500, key);
             server.Start();
-            Listener client = new TransparentForwardListener(IPAddress.Parse("192.168.1.107"), 1234, IPAddress.Parse("192.168.1.107"), 4567);
+            Listener client = new GFWPressForwardClientListener(IPAddress.Parse("192.168.1.107"), 1234, IPAddress.Parse("192.168.1.107"), 4567, key);
             client.Start();
 
             Console.ReadLine();
