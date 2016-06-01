@@ -47,37 +47,19 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                 }
                 byte[] recv = new byte[Ret];
                 System.Array.Copy(_buffer, 0, recv, 0, recv.Length);
-                byte[] encrypted = recv;
+                //byte[] encrypt = recv;
+
+                byte[] encrypt = _aes.encryptNet(_key, recv);
                 recv = null;
-                //_aes.encryptNet(_key, recv);
 
-
-                _destinationStream.BeginWrite(encrypted, 0, encrypted.Length, new AsyncCallback(this.OnRemoteSent), _destinationStream);
-                encrypted = null;
+                _destinationStream.Write(encrypt, 0, encrypt.Length);
+                _clientStream.BeginRead(_buffer, 0, _buffer.Length, new AsyncCallback(this.OnClientReceive), ClientSocket);
+                encrypt = null;
             }
             catch
             {
                 Dispose();
             }
-        }
-        ///<summary>Called when we have sent data to the remote host.<br>When all the data has been sent, we will start receiving again from the local client.</br></summary>
-        ///<param name="ar">The result of the asynchronous operation.</param>
-        protected void OnRemoteSent(IAsyncResult ar)
-        {
-            try
-            {
-                int Ret = _destinationStream.EndRead(ar);
-                if (Ret > 0)
-                {
-                    _clientStream.BeginRead(_buffer, 0, _buffer.Length, new AsyncCallback(this.OnClientReceive), ClientSocket);
-                    return;
-                }
-            }
-            catch
-            {
-                Dispose();
-            }
-            
         }
     }
 }
