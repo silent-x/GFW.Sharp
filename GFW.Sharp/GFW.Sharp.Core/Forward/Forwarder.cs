@@ -24,7 +24,7 @@ namespace GFW.Sharp.Core.Forward
         /// <summary>Holds the value of the DestinationSocket property.</summary>
         private Socket m_DestinationSocket;
         /// <summary>Holds the value of the Buffer property.</summary>
-        private byte[] m_Buffer = new byte[4096]; //0<->4095 = 4096
+        private byte[] m_Buffer = new byte[64*1024]; //0<->4095 = 4096
         ///<summary>Initializes a new instance of the Client class.</summary>
         ///<param name="ClientSocket">The <see cref ="Socket">Socket</see> connection between this proxy server and the local client.</param>
         ///<param name="Destroyer">The callback method to be called when this Client object disconnects from the local client and the remote server.</param>
@@ -107,6 +107,7 @@ namespace GFW.Sharp.Core.Forward
             DestinationSocket = null;
             if (Destroyer != null)
                 Destroyer(this);
+            m_Buffer = null;
         }
         ///<summary>Returns text information about this Client object.</summary>
         ///<returns>A string representing this Client object.</returns>

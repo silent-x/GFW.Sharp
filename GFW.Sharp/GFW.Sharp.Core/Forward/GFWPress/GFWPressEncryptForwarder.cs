@@ -13,11 +13,15 @@ namespace GFW.Sharp.Core.Forward.GFWPress
     {
         private Encrypt _aes = new Encrypt();
         private SecretKey _key;
+        private NetworkStream _clientStream;
+        private NetworkStream _destinationStream;
         public GFWPressEncryptForwarder(Socket ClientSocket, DestroyDelegate Destroyer, Socket DestinationSocket, SecretKey key) : base(ClientSocket, Destroyer)
         {
             //this.MapTo = MapTo;
             this.DestinationSocket = DestinationSocket;
             this._key = key;
+            _clientStream = new NetworkStream(this.ClientSocket);
+            _destinationStream = new NetworkStream(this.DestinationSocket);
         }
         public override void StartForward()
         {
@@ -45,8 +49,8 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                         try
                         {
                             Logger.Write(this.GetType().Name + " reading bytes");
-                            read_num = ClientSocket.Receive(buffer,SocketFlags.None);
-                            Logger.Write(this.GetType().Name + " "+ read_num + " bytes read");
+                            read_num = _clientStream.Read(buffer,0,buffer.Length);
+                            Logger.Write(this.GetType().Name + " " + read_num + " bytes read");
                         }
                         catch
                         {
@@ -75,8 +79,8 @@ namespace GFW.Sharp.Core.Forward.GFWPress
 
                         try
                         {
-                            Logger.Write(this.GetType().Name+" sending bytes: " + encrypt_bytes.Length);
-                            DestinationSocket.Send(encrypt_bytes);
+                            Logger.Write(this.GetType().Name + " sending bytes: " + encrypt_bytes.Length);
+                            _destinationStream.Write(encrypt_bytes,0,encrypt_bytes.Length);
                             Logger.Write(this.GetType().Name + " sending completed");
 
                         }
@@ -120,10 +124,10 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                     encrypt_bytes = null;
                 }
 
-                
+
 
             })).Start();
         }
-        
+
     }
 }

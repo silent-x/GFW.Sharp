@@ -1,4 +1,5 @@
 ﻿using GFW.Sharp.Core.Ciphering;
+using GFW.Sharp.Core.Forward.Transparent;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +21,12 @@ namespace GFW.Sharp.Core.Forward.GFWPress
 
         public override Forwarder GetInputToOutputForwarder(Socket inputSocket, Socket outputSocket)
         {
-            return new GFWPressDecryptForwarder(inputSocket, RemoveClient, outputSocket, _key);
+            return new GFWPressEncryptAsyncForwarder(inputSocket, RemoveClient, outputSocket,_key);
         }
 
         public override Forwarder GetOutputToInputForwarder(Socket outputSocket, Socket inputSocket)
         {
-            return new GFWPressEncryptForwarder(outputSocket, RemoveClient, inputSocket, _key);
+            return new GFWPressDecryptAsyncForwarder(outputSocket, RemoveClient, inputSocket, _key);
         }
     }
 }

@@ -19,6 +19,9 @@ namespace GFW.Sharp.Core.Forward
         {
             MapTo = MapToIP;
         }
+        private Forwarder forwarderTx;
+        private Forwarder forwarderRx;
+
         public ForwarderListener(IPAddress Address, int Port, IPAddress MapToAddress, int MapToPort) : this(Address, Port, new IPEndPoint(MapToAddress, MapToPort)) { }
         private IPEndPoint m_MapTo;
         private IPEndPoint MapTo
@@ -49,12 +52,12 @@ namespace GFW.Sharp.Core.Forward
                 Socket inputSocket = ListenSocket.EndAccept(ar);
                 if (inputSocket != null)
                 {
-                    //inputSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+                    inputSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
                     Socket outputSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                     outputSocket.Connect(MapTo);
-                    //outputSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
-                    Forwarder forwarderTx = GetInputToOutputForwarder(inputSocket, outputSocket);
-                    Forwarder forwarderRx = GetOutputToInputForwarder(outputSocket, inputSocket);
+                    outputSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+                    forwarderTx = GetInputToOutputForwarder(inputSocket, outputSocket);
+                    forwarderRx = GetOutputToInputForwarder(outputSocket, inputSocket);
                     AddClient(forwarderTx);
                     AddClient(forwarderRx);
                     forwarderTx.StartForward();
@@ -76,6 +79,20 @@ namespace GFW.Sharp.Core.Forward
         public override string ToString()
         {
             return "PORTMAP service on " + Address.ToString() + ":" + Port.ToString();
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            if(forwarderTx != null)
+            {
+                forwarderTx.Dispose();
+            }
+            if (forwarderRx != null)
+            {
+                forwarderRx.Dispose();
+            }
+            
         }
     }
 }

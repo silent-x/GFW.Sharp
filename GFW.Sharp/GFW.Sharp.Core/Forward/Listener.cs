@@ -160,7 +160,7 @@ namespace GFW.Sharp.Core.Forward
         ///<summary>Disposes of the resources (other than memory) used by the Listener.</summary>
         ///<remarks>Stops listening and disposes <em>all</em> the client objects. Once disposed, this object should not be used anymore.</remarks>
         ///<seealso cref ="System.IDisposable"/>
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (IsDisposed)
                 return;

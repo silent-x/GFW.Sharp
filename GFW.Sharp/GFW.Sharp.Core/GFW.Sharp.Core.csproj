@@ -47,7 +47,9 @@
     <Compile Include="Ciphering\Encrypt.cs" />
     <Compile Include="Ciphering\SecretKey.cs" />
     <Compile Include="Forward\Forwarder.cs" />
+    <Compile Include="Forward\GFWPress\GFWPressDecryptAsyncForwarder.cs" />
     <Compile Include="Forward\GFWPress\GFWPressDecryptForwarder.cs" />
+    <Compile Include="Forward\GFWPress\GFWPressEncryptAsyncForwarder.cs" />
     <Compile Include="Forward\GFWPress\GFWPressEncryptForwarder.cs" />
     <Compile Include="Forward\GFWPress\GFWPressForwardClientListener.cs" />
     <Compile Include="Forward\GFWPress\GFWPressForwardServerListener.cs" />

@@ -12,11 +12,15 @@ namespace GFW.Sharp.Core.Forward.GFWPress
     {
         private SecretKey _key;
         private Encrypt _aes = new Encrypt();
+        private NetworkStream _clientStream;
+        private NetworkStream _destinationStream;
         public GFWPressDecryptForwarder(Socket ClientSocket, DestroyDelegate Destroyer, Socket DestinationSocket, SecretKey key) : base(ClientSocket, Destroyer)
         {
             //this.MapTo = MapTo;
             this.DestinationSocket = DestinationSocket;
             _key = key;
+            _clientStream = new NetworkStream(this.ClientSocket);
+            _destinationStream = new NetworkStream(this.DestinationSocket);
         }
         public override void StartForward()
         {
@@ -40,7 +44,8 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                         int read_num = -1;
                         try
                         {
-                            read_num = ClientSocket.Receive(buffer);
+                            read_num = _clientStream.Read(buffer,0,buffer.Length);
+                            //new Queue<byte>().en
                         }
                         catch
                         {
@@ -85,7 +90,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
 
                             try
                             {
-                                read_num = ClientSocket.Receive(buffer, read_count, size_count - read_count, SocketFlags.None);
+                                read_num = _clientStream.Read(buffer, read_count, size_count - read_count);
                             }
                             catch
                             {
@@ -136,7 +141,8 @@ namespace GFW.Sharp.Core.Forward.GFWPress
 
                         try
                         {
-                            DestinationSocket.Send(decrypt_bytes);
+                            _destinationStream.Write(decrypt_bytes,0,decrypt_bytes.Length);
+                            _destinationStream.Flush();
                         }
                         catch
                         {
