@@ -47,6 +47,9 @@
     <Compile Include="Ciphering\Encrypt.cs" />
     <Compile Include="Ciphering\SecretKey.cs" />
     <Compile Include="Forward\Forwarder.cs" />
+    <Compile Include="Forward\GFWPress\GFWPressDecryptForwarder.cs" />
+    <Compile Include="Forward\GFWPress\GFWPressEncryptForwarder.cs" />
+    <Compile Include="Forward\GFWPress\GFWPressForwardListener.cs" />
     <Compile Include="Forward\Listener.cs" />
     <Compile Include="Forward\ForwarderListener.cs" />
     <Compile Include="Forward\Transparent\TransparentForwarder.cs" />
@@ -56,9 +59,6 @@
     <Compile Include="Proxy\Listener.cs" />
     <Compile Include="Proxy\PortMap\PortMapClient.cs" />
     <Compile Include="Proxy\PortMap\PortMapListener.cs" />
-    <Compile Include="Worker\DecryptForwardWorker.cs" />
-    <Compile Include="Worker\EncryptForwardWorker.cs" />
-    <Compile Include="Worker\TransparentForwardWorker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
