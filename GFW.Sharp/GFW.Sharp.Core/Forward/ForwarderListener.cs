@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GFW.Sharp.Core.Forward.Transparent;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -6,10 +7,13 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GFW.Sharp.Core.Forward.Transparent
+namespace GFW.Sharp.Core.Forward
 {
-    public class ForwarderListener : Listener
+    public abstract class ForwarderListener : Listener
     {
+        public abstract Forwarder GetInputToOutputForwarder(Socket inputSocket, Socket outputSocket);
+
+        public abstract Forwarder GetOutputToInputForwarder(Socket outputSocket, Socket inputSocket);
         public ForwarderListener(int Port, IPEndPoint MapToIP) : this(IPAddress.Any, Port, MapToIP) { }
         public ForwarderListener(IPAddress Address, int Port, IPEndPoint MapToIP) : base(Port, Address)
         {
@@ -47,8 +51,8 @@ namespace GFW.Sharp.Core.Forward.Transparent
                 {
                     Socket outputSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                     outputSocket.Connect(MapTo);
-                    Forwarder forwarderTx = new TransparentForwarder(inputSocket, new DestroyDelegate(this.RemoveClient), outputSocket);
-                    Forwarder forwarderRx = new TransparentForwarder(outputSocket, new DestroyDelegate(this.RemoveClient), inputSocket);
+                    Forwarder forwarderTx = GetInputToOutputForwarder(inputSocket, outputSocket);
+                    Forwarder forwarderRx = GetOutputToInputForwarder(outputSocket, inputSocket);
                     AddClient(forwarderTx);
                     AddClient(forwarderRx);
                     forwarderTx.StartForward();

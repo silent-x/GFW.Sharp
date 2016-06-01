@@ -1,4 +1,5 @@
 ﻿using GFW.Sharp.Core.Ciphering;
+using GFW.Sharp.Core.Forward;
 using GFW.Sharp.Core.Forward.Transparent;
 
 using System;
@@ -63,10 +64,10 @@ namespace GFW.Sharp.Test
             //clientSocket.Listen(100);
             //ListenClient(clientSocket);
 
-            ForwarderListener server = new ForwarderListener(IPAddress.Parse("127.0.0.1"), 4567, IPAddress.Parse("192.168.1.200"), 8500);
+            ForwarderListener server = new TransparentForwardListener(IPAddress.Parse("192.168.1.107"), 4567, IPAddress.Parse("192.168.1.200"), 8500);
             server.Start();
-            ForwarderListener client = new ForwarderListener(IPAddress.Parse("127.0.0.1"), 1234, IPAddress.Parse("127.0.0.1"), 4567);
-            client.Start();
+            //ForwarderListener client = new ForwarderListener(IPAddress.Parse("127.0.0.1"), 1234, IPAddress.Parse("127.0.0.1"), 4567);
+            //client.Start();
             //listenerRx.Start();
             Console.ReadLine();
 

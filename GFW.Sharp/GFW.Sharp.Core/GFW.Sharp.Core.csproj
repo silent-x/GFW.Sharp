@@ -48,8 +48,9 @@
     <Compile Include="Ciphering\SecretKey.cs" />
     <Compile Include="Forward\Forwarder.cs" />
     <Compile Include="Forward\Listener.cs" />
-    <Compile Include="Forward\Transparent\ForwarderListener.cs" />
-    <Compile Include="Forward\Transparent\TransparenetForwarder.cs" />
+    <Compile Include="Forward\ForwarderListener.cs" />
+    <Compile Include="Forward\Transparent\TransparentForwarder.cs" />
+    <Compile Include="Forward\Transparent\TransparentForwardListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Proxy\Client.cs" />
     <Compile Include="Proxy\Listener.cs" />
