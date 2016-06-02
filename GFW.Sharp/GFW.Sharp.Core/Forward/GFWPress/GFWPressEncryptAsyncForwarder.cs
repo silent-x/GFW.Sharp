@@ -47,9 +47,9 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                 }
                 byte[] recv = new byte[Ret];
                 System.Array.Copy(_buffer, 0, recv, 0, recv.Length);
-                byte[] encrypt = recv;
+                //byte[] encrypt = recv;
 
-                //byte[] encrypt = _aes.encryptNet(_key, recv);
+                byte[] encrypt = _aes.encryptNet(_key, recv);
                 recv = null;
 
                 _destinationStream.Write(encrypt, 0, encrypt.Length);
