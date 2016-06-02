@@ -53,18 +53,15 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                 }
                 byte[] recv = new byte[Ret];
                 System.Array.Copy(_buffer, 0, recv, 0, recv.Length);
-                byte[] decrypted = recv;
+                
                 _sendingQueue.AddRange(recv);
                 recv = null;
-                //_aes.encryptNet(_key, recv);
-                if(_sendingQueue.Count>30)
-                {
-                    byte[] buffer = new byte[30];
-                    _sendingQueue.PopRange(buffer, 30);
-                    var size_bytes = _aes.decrypt(_key, buffer);
-                }
 
-                _destinationStream.Write(decrypted, 0, decrypted.Length);
+
+                byte[] decrypted = new byte[512*1024];
+                int read = _sendingQueue.PopRange(decrypted, decrypted.Length);
+
+                _destinationStream.Write(decrypted, 0, read);
 
                 _clientStream.BeginRead(_buffer, 0, _buffer.Length, new AsyncCallback(this.OnClientReceive), ClientSocket);
                 decrypted = null;
