@@ -74,7 +74,7 @@ namespace GFW.Sharp.Core.Forward
         }
         ///<summary>Gets the list of connected clients.</summary>
         ///<value>An instance of the ArrayList class that's used to store all the connections.</value>
-        protected ArrayList Clients
+        protected List<Forwarder> Clients
         {
             get
             {
@@ -130,7 +130,10 @@ namespace GFW.Sharp.Core.Forward
         ///<param name="client">The client to remove from the client list.</param>
         protected void RemoveClient(Forwarder client)
         {
-            Clients.Remove(client);
+            if (Clients.IndexOf(client) > 0)
+            {
+                Clients.Remove(client);
+            }
         }
         ///<summary>Returns the number of clients in the client list.</summary>
         ///<returns>The number of connected clients.</returns>
@@ -146,7 +149,7 @@ namespace GFW.Sharp.Core.Forward
         {
             if (Index < 0 || Index >= GetClientCount())
                 return null;
-            return (Forwarder)Clients[Index];
+            return Clients[Index];
         }
         ///<summary>Gets a value indicating whether the Listener is currently listening or not.</summary>
         ///<value>A boolean that indicates whether the Listener is currently listening or not.</value>
@@ -166,7 +169,7 @@ namespace GFW.Sharp.Core.Forward
                 return;
             while (Clients.Count > 0)
             {
-                ((Forwarder)Clients[0]).Dispose();
+                Clients[0].Dispose();
             }
             try
             {
@@ -268,7 +271,7 @@ namespace GFW.Sharp.Core.Forward
         /// <summary>Holds the value of the ListenSocket property.</summary>
         private Socket m_ListenSocket;
         /// <summary>Holds the value of the Clients property.</summary>
-        private ArrayList m_Clients = new ArrayList();
+        private List<Forwarder> m_Clients = new List<Forwarder>();
         /// <summary>Holds the value of the IsDisposed property.</summary>
         private bool m_IsDisposed = false;
     }

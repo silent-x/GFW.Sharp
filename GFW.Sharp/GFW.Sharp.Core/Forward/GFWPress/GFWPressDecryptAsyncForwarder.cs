@@ -45,7 +45,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
             try
             {
                 int Ret = _clientStream.EndRead(ar);
-                if (Ret <  30)
+                if (Ret <  Encrypt.ENCRYPT_SIZE)
                 {
                     //System.Threading.Thread.Sleep(10);
                     Dispose();
@@ -58,7 +58,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                 recv = null;
 
 
-                byte[] head = new byte[30];
+                byte[] head = new byte[Encrypt.ENCRYPT_SIZE];
                 int read = _sendingQueue.PopRange(head, head.Length);
 
                 byte[] size_bytes = _aes.decrypt(_key, head);

@@ -17,7 +17,7 @@ namespace GFW.Sharp.Core.Ciphering
     {
         public static readonly String CHARSET = "UTF-8";
 
-        public static readonly int BLOCK_MAX_FILE = 64 * 1024 * 1024; // 64MB，被加密数据块的字节最大长度，用于文件
+        //public static readonly int BLOCK_MAX_FILE = 64 * 1024 * 1024; // 64MB，被加密数据块的字节最大长度，用于文件
 
         public static readonly int ENCRYPT_SIZE = 30; // 加密数据长度值加密后的字节长度，固定30个字节，解密后固定14个字节
 
@@ -1042,7 +1042,7 @@ namespace GFW.Sharp.Core.Ciphering
          * @param password
          * @return
          */
-        public bool isPassword(String password)
+        public static bool isPassword(String password)
         {
 
             if (password == null || !Regex.IsMatch(password, "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$"))

@@ -52,11 +52,14 @@ namespace GFW.Sharp.Test
             //    }
             //}
 
-            SecretKey key = aes.getPasswordKey("Silent*X83");
-            Listener server = new GFWPressForwardServerListener(IPAddress.Parse("127.0.0.1"), 4567, IPAddress.Parse("192.168.1.200"), 8500, key);
-            server.Start();
-            //Listener client = new GFWPressForwardClientListener(IPAddress.Parse("192.168.1.107"), 1234, IPAddress.Parse("192.168.1.107"), 4567, key);
+            //SecretKey key = aes.getPasswordKey("Silent*X83");
+            //Listener server = new GFWPressForwardServerListener(IPAddress.Parse("127.0.0.1"), 4567, IPAddress.Parse("192.168.1.200"), 8500, key);
+            //server.Start();
+            //Listener client = new GFWPressForwardClientListener(IPAddress.Parse("127.0.0.1"), 1234, IPAddress.Parse("127.0.0.1"), 4567, key);
             //client.Start();
+
+            var ipExt = Listener.GetLocalExternalIP();
+            var ipInt = Listener.GetLocalInternalIP();
 
             Console.ReadLine();
 

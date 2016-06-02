@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFW.Sharp.Core", "GFW.Sharp.Core\GFW.Sharp.Core.csproj", "{2DDADC03-40FC-4833-A1B9-CD038598715A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFW.Sharp.Test", "GFW.Sharp.Test\GFW.Sharp.Test.csproj", "{752E3C00-1462-4D9A-B404-69802D0D72AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFW.Sharp.Console", "GFW.Sharp.Console\GFW.Sharp.Console.csproj", "{51D7C9F9-0E58-4B34-B446-17FC20EF2211}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{752E3C00-1462-4D9A-B404-69802D0D72AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{752E3C00-1462-4D9A-B404-69802D0D72AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{752E3C00-1462-4D9A-B404-69802D0D72AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51D7C9F9-0E58-4B34-B446-17FC20EF2211}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51D7C9F9-0E58-4B34-B446-17FC20EF2211}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51D7C9F9-0E58-4B34-B446-17FC20EF2211}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51D7C9F9-0E58-4B34-B446-17FC20EF2211}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
