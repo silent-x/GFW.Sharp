@@ -5,11 +5,13 @@ ps:因为Java不会。。。
 
 .Net Framework 4.5.1，其实没用到啥新功能，稍微改改.Net 2.0应该也能跑起来的。<br/>
 Win7以上应该可以直接运行，linux下先要安装mono-complete。<br/>
+<br/>
+<br/>
 Ubuntu:<br/>
 apt-get install mono-complete<br/>
 <br/>
 mono GFW.Sharp.Console<br/>
-
+<br/>
 GFW.Sharp, a c# port of gfw.press. Thanks to @chinashiyu.
 Parameters:
 
