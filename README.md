@@ -3,6 +3,13 @@ A C# port of gfw.press
 感谢石斑鱼大爷的原版，C#版只是为了练练手，把图形界面去掉和优化性能。完全兼容java版。</br>
 ps:因为Java不会。。。
 
+.Net Framework 4.5.1，其实没用到啥新功能，稍微改改.Net 2.0应该也能跑起来的。<br/>
+Win7以上应该可以直接运行，linux下先要安装mono-complete。<br/>
+Ubuntu:<br/>
+apt-get install mono-complete<br/>
+<br/>
+mono GFW.Sharp.Console<br/>
+
 GFW.Sharp, a c# port of gfw.press. Thanks to @chinashiyu.
 Parameters:
 
