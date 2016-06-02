@@ -1,13 +1,14 @@
 # GFW.Sharp
-A C# port of gfw.press
+A C# port of gfw.press<br />
 感谢石斑鱼大爷的原版，C#版只是为了练练手，把图形界面去掉和优化性能。完全兼容java版。</br>
-ps:因为Java不会。。。
-
+ps:因为Java不会。。。<br />
+异步Socket，CPU/RAM占用率都很低，运行内存大概在50M左右。<br />
+<br />
 .Net Framework 4.5.1，其实没用到啥新功能，稍微改改.Net 2.0应该也能跑起来的。<br/>
 Win7以上应该可以直接运行，linux下先要安装mono-complete。<br/>
 <br/>
 <br/>
-Ubuntu:<br/>
+Ubuntu 16.04:<br/>
 apt-get install mono-complete<br/>
 <br/>
 mono GFW.Sharp.Console<br/>
