@@ -13,24 +13,20 @@ namespace GFW.Sharp.Core.Forward.GFWPress
     {
         private Encrypt _aes = new Encrypt();
         private SecretKey _key;
-        private NetworkStream _clientStream;
-        private NetworkStream _destinationStream;
+
 
         private ConcurrentList<byte> _sendingQueue;
         public GFWPressDecryptAsyncForwarder(Socket ClientSocket, DestroyDelegate Destroyer, Socket DestinationSocket, SecretKey key) : base(ClientSocket, Destroyer)
         {
-            //this.MapTo = MapTo;
             this.DestinationSocket = DestinationSocket;
             this._key = key;
-            _clientStream = new NetworkStream(this.ClientSocket);
-            _destinationStream = new NetworkStream(this.DestinationSocket);
             _sendingQueue = new ConcurrentList<byte>();
         }
         public override void StartForward()
         {
             try
             {
-                _clientStream.BeginRead(_buffer, 0, _buffer.Length, new AsyncCallback(this.OnClientReceive), _clientStream);
+                ClientSocket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(this.OnClientReceive), ClientSocket);
             }
             catch
             {
@@ -44,7 +40,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
         {
             try
             {
-                int Ret = _clientStream.EndRead(ar);
+                int Ret = ClientSocket.EndReceive(ar);
                 if (Ret <  Encrypt.ENCRYPT_SIZE)
                 {
                     //System.Threading.Thread.Sleep(10);
@@ -85,7 +81,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                 while (read_count < size_count)
                 {
 
-                    read_num = _clientStream.Read(buffer, read_count, size_count - read_count);
+                    read_num = ClientSocket.Receive(buffer, read_count, size_count - read_count,SocketFlags.None);
 
                     if (read_num == 0)
                     {
@@ -128,9 +124,9 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                     return;
                 }
 
-                _destinationStream.Write(decrypt_bytes, 0, decrypt_bytes.Length);
+                DestinationSocket.Send(decrypt_bytes);
 
-                _clientStream.BeginRead(_buffer, 0, _buffer.Length, new AsyncCallback(this.OnClientReceive), ClientSocket);
+                ClientSocket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(this.OnClientReceive), ClientSocket);
                 decrypt_bytes = null;
             }
             catch

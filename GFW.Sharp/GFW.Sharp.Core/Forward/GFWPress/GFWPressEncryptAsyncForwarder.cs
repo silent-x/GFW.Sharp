@@ -12,21 +12,17 @@ namespace GFW.Sharp.Core.Forward.GFWPress
     {
         private Encrypt _aes = new Encrypt();
         private SecretKey _key;
-        private NetworkStream _clientStream;
-        private NetworkStream _destinationStream;
         public GFWPressEncryptAsyncForwarder(Socket ClientSocket, DestroyDelegate Destroyer, Socket DestinationSocket, SecretKey key) : base(ClientSocket, Destroyer)
         {
             //this.MapTo = MapTo;
             this.DestinationSocket = DestinationSocket;
             this._key = key;
-            _clientStream = new NetworkStream(this.ClientSocket);
-            _destinationStream = new NetworkStream(this.DestinationSocket);
         }
         public override void StartForward()
         {
             try
             {
-                _clientStream.BeginRead(_buffer, 0, _buffer.Length, new AsyncCallback(this.OnClientReceive), _clientStream);
+                ClientSocket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(this.OnClientReceive), ClientSocket);
             }
             catch
             {
@@ -39,7 +35,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
         {
             try
             {
-                int Ret = _clientStream.EndRead(ar);
+                int Ret = ClientSocket.EndReceive(ar);
                 if (Ret <= 0)
                 {
                     Dispose();
@@ -52,8 +48,8 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                 byte[] encrypt = _aes.encryptNet(_key, recv);
                 recv = null;
 
-                _destinationStream.Write(encrypt, 0, encrypt.Length);
-                _clientStream.BeginRead(_buffer, 0, _buffer.Length, new AsyncCallback(this.OnClientReceive), ClientSocket);
+                DestinationSocket.Send(encrypt);
+                ClientSocket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(this.OnClientReceive), ClientSocket);
                 encrypt = null;
             }
             catch
