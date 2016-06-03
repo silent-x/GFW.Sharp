@@ -13,15 +13,11 @@ namespace GFW.Sharp.Core.Forward.GFWPress
     {
         private Encrypt _aes = new Encrypt();
         private SecretKey _key;
-        private NetworkStream _clientStream;
-        private NetworkStream _destinationStream;
         public GFWPressEncryptForwarder(Socket ClientSocket, DestroyDelegate Destroyer, Socket DestinationSocket, SecretKey key) : base(ClientSocket, Destroyer)
         {
-            //this.MapTo = MapTo;
+            ClientSocket.Blocking = false;
             this.DestinationSocket = DestinationSocket;
             this._key = key;
-            _clientStream = new NetworkStream(this.ClientSocket);
-            _destinationStream = new NetworkStream(this.DestinationSocket);
         }
         public override void StartForward()
         {
@@ -48,22 +44,35 @@ namespace GFW.Sharp.Core.Forward.GFWPress
 
                         try
                         {
-                            Logger.Write(this.GetType().Name + " reading bytes");
-                            read_num = _clientStream.Read(buffer,0,buffer.Length);
-                            Logger.Write(this.GetType().Name + " " + read_num + " bytes read");
+                            //Logger.Write(this.GetType().Name + " reading bytes");
+                            read_num = ClientSocket.Receive(buffer, 0, buffer.Length, SocketFlags.None);
+                            //Logger.Write(this.GetType().Name + " " + read_num + " bytes read");
+                        }
+                        catch(SocketException sex)
+                        {
+                            if(sex.SocketErrorCode == SocketError.WouldBlock)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                                continue;
+                            }
+                            else
+                            {
+                                Dispose();
+                                break;
+                            }
                         }
                         catch
                         {
                             Dispose();
                             break;
                         }
-                        if (read_num <= 0)
+
+                        Logger.ThreadWrite(this.GetType().Name + " read bytes: " + read_num);
+                        if(read_num == 0)
                         {
-                            Dispose();
-                            break;
-
+                            System.Threading.Thread.Sleep(1000);
+                            continue;
                         }
-
                         read_bytes = new byte[read_num];
 
                         System.Array.Copy(buffer, 0, read_bytes, 0, read_num);
@@ -72,7 +81,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
 
                         if (encrypt_bytes == null)
                         {
-
+                            Dispose();
                             break; // 加密出错，退出
 
                         }
@@ -80,8 +89,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                         try
                         {
                             Logger.Write(this.GetType().Name + " sending bytes: " + encrypt_bytes.Length);
-                            _destinationStream.Write(encrypt_bytes,0,encrypt_bytes.Length);
-                            Logger.Write(this.GetType().Name + " sending completed");
+                            DestinationSocket.Send(encrypt_bytes,0,encrypt_bytes.Length,SocketFlags.None);
 
                         }
                         catch

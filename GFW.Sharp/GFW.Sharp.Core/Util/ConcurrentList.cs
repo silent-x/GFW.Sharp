@@ -10,6 +10,17 @@ namespace GFW.Sharp.Core.Util
     {
         private List<T> _list = new List<T>();
         private object _sync = new object();
+
+        public T this[int index]
+        {
+            get
+            {
+                lock (_sync)
+                {
+                    return _list[index];
+                }
+            }
+        }
         public void Add(T value)
         {
             lock (_sync)
@@ -37,6 +48,14 @@ namespace GFW.Sharp.Core.Util
             lock (_sync)
             {
                 _list.AddRange(value);
+            }
+        }
+
+        public void Remove(T value)
+        {
+            lock (_sync)
+            {
+                _list.Remove(value);
             }
         }
 

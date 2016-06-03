@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GFW.Sharp.Core.Util;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,7 +75,7 @@ namespace GFW.Sharp.Core.Forward
         }
         ///<summary>Gets the list of connected clients.</summary>
         ///<value>An instance of the ArrayList class that's used to store all the connections.</value>
-        protected List<Forwarder> Clients
+        protected ConcurrentList<Forwarder> Clients
         {
             get
             {
@@ -123,17 +124,15 @@ namespace GFW.Sharp.Core.Forward
         ///<param name="client">The client to add to the client list.</param>
         protected void AddClient(Forwarder client)
         {
-            if (Clients.IndexOf(client) == -1)
+            if (Clients.Find( tofind=> tofind == client ) == null)
                 Clients.Add(client);
         }
         ///<summary>Removes the specified Client from the client list.</summary>
         ///<param name="client">The client to remove from the client list.</param>
         protected void RemoveClient(Forwarder client)
         {
-            if (Clients.IndexOf(client) > 0)
-            {
-                Clients.Remove(client);
-            }
+            Clients.Remove(client);
+            
         }
         ///<summary>Returns the number of clients in the client list.</summary>
         ///<returns>The number of connected clients.</returns>
@@ -145,12 +144,12 @@ namespace GFW.Sharp.Core.Forward
         ///<param name="Index">The index of the requested client.</param>
         ///<returns>The requested client.</returns>
         ///<remarks>If the specified index is invalid, the GetClientAt method returns null.</remarks>
-        public Forwarder GetClientAt(int Index)
-        {
-            if (Index < 0 || Index >= GetClientCount())
-                return null;
-            return Clients[Index];
-        }
+        //public Forwarder GetClientAt(int Index)
+        //{
+        //    if (Index < 0 || Index >= GetClientCount())
+        //        return null;
+        //    return Clients[Index];
+        //}
         ///<summary>Gets a value indicating whether the Listener is currently listening or not.</summary>
         ///<value>A boolean that indicates whether the Listener is currently listening or not.</value>
         public bool Listening
@@ -271,7 +270,7 @@ namespace GFW.Sharp.Core.Forward
         /// <summary>Holds the value of the ListenSocket property.</summary>
         private Socket m_ListenSocket;
         /// <summary>Holds the value of the Clients property.</summary>
-        private List<Forwarder> m_Clients = new List<Forwarder>();
+        private ConcurrentList<Forwarder> m_Clients = new ConcurrentList<Forwarder>();
         /// <summary>Holds the value of the IsDisposed property.</summary>
         private bool m_IsDisposed = false;
     }

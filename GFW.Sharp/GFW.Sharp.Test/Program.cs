@@ -57,10 +57,14 @@ namespace GFW.Sharp.Test
             //server.Start();
             //Listener client = new GFWPressForwardClientListener(IPAddress.Parse("192.168.1.107"), 1234, IPAddress.Parse("192.168.1.107"), 4567, key);
             //Listener client = new TransparentForwardListener(IPAddress.Parse("192.168.1.107"), 1234, IPAddress.Parse("192.168.1.200"), 8500);
-            Listener client = new GFWPressForwardClientListener(IPAddress.Parse("192.168.1.107"), 4567, IPAddress.Parse("69.30.201.106"), 18150, key);
+            //Listener client = new GFWPressForwardClientListener(IPAddress.Parse("127.0.0.1"), 1234, IPAddress.Parse("192.168.1.104"), 4567, key);
+            Listener sertver = new TransparentForwardListener(IPAddress.Parse("127.0.0.1"), 4567, IPAddress.Parse("192.168.1.200"), 8500);
+            sertver.Start();
+
+            Listener client = new TransparentForwardListener(IPAddress.Parse("127.0.0.1"), 1234, IPAddress.Parse("127.0.0.1"), 4567);
             client.Start();
 
-            
+
 
             //var ipExt = Listener.GetLocalExternalIP();
             //var ipInt = Listener.GetLocalInternalIP();

@@ -12,15 +12,11 @@ namespace GFW.Sharp.Core.Forward.GFWPress
     {
         private SecretKey _key;
         private Encrypt _aes = new Encrypt();
-        private NetworkStream _clientStream;
-        private NetworkStream _destinationStream;
         public GFWPressDecryptForwarder(Socket ClientSocket, DestroyDelegate Destroyer, Socket DestinationSocket, SecretKey key) : base(ClientSocket, Destroyer)
         {
-            //this.MapTo = MapTo;
+            ClientSocket.Blocking = false;
             this.DestinationSocket = DestinationSocket;
             _key = key;
-            _clientStream = new NetworkStream(this.ClientSocket);
-            _destinationStream = new NetworkStream(this.DestinationSocket);
         }
         public override void StartForward()
         {
@@ -42,21 +38,35 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                         buffer = new byte[Encrypt.ENCRYPT_SIZE];
 
                         int read_num = -1;
+
                         try
                         {
-                            read_num = _clientStream.Read(buffer,0,buffer.Length);
+                            //var vs = new NetworkStream(ClientSocket);
+                            read_num = ClientSocket.Receive(buffer, 0, buffer.Length, SocketFlags.None);
                             //new Queue<byte>().en
                         }
-                        catch
+                        catch (SocketException sex)
+                        {
+                            if (sex.SocketErrorCode == SocketError.WouldBlock)
+                            {
+                                System.Threading.Thread.Sleep(1000);
+                                continue;
+                            }
+                            else
+                            {
+                                Dispose();
+                                break;
+                            }
+                        }
+                        catch (Exception ex)
                         {
                             Dispose();
                             break;
                         }
-                        
 
-                        if (read_num == -1 || read_num != Encrypt.ENCRYPT_SIZE)
+                        if (read_num != Encrypt.ENCRYPT_SIZE)
                         {
-
+                            Dispose();
                             break;
 
                         }
@@ -65,7 +75,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
 
                         if (size_bytes == null)
                         {
-
+                            Dispose();
                             break; // 解密出错，退出
 
                         }
@@ -74,7 +84,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
 
                         if (sizes == null || sizes.Length != 2 || sizes[0] > BUFFER_SIZE_MAX)
                         {
-
+                            Dispose();
                             break;
 
                         }
@@ -90,16 +100,29 @@ namespace GFW.Sharp.Core.Forward.GFWPress
 
                             try
                             {
-                                read_num = _clientStream.Read(buffer, read_count, size_count - read_count);
+                                read_num = ClientSocket.Receive(buffer, read_count, size_count - read_count,SocketFlags.None);
+                            }
+                            catch (SocketException sex)
+                            {
+                                if (sex.SocketErrorCode == SocketError.WouldBlock)
+                                {
+                                    System.Threading.Thread.Sleep(1000);
+                                    continue;
+                                }
+                                else
+                                {
+                                    Dispose();
+                                    break;
+                                }
                             }
                             catch
                             {
                                 Dispose();
                                 break;
                             }
-                            if (read_num == -1)
+                            if (read_num == 0)
                             {
-
+                                Dispose();
                                 break;
 
                             }
@@ -110,7 +133,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
 
                         if (read_count != size_count)
                         {
-
+                            Dispose();
                             break;
 
                         }
@@ -134,15 +157,14 @@ namespace GFW.Sharp.Core.Forward.GFWPress
 
                         if (decrypt_bytes == null)
                         {
-
+                            Dispose();
                             break;
 
                         }
 
                         try
                         {
-                            _destinationStream.Write(decrypt_bytes,0,decrypt_bytes.Length);
-                            _destinationStream.Flush();
+                            DestinationSocket.Send(decrypt_bytes, 0, decrypt_bytes.Length, SocketFlags.None);
                         }
                         catch
                         {

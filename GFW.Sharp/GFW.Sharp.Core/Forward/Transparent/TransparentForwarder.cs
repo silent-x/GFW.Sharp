@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GFW.Sharp.Core.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -40,28 +41,20 @@ namespace GFW.Sharp.Core.Forward.Transparent
                     Dispose();
                     return;
                 }
-                DestinationSocket.BeginSend(_buffer, 0, Ret, SocketFlags.None, new AsyncCallback(this.OnRemoteSent), DestinationSocket);
+                Logger.WriteSocketToFile(ClientSocket, _buffer, 0, Ret,false);
+                int sent = DestinationSocket.Send(_buffer, 0, Ret, SocketFlags.None);
+                Logger.WriteSocketToFile(DestinationSocket, _buffer, 0, Ret,true);
+                if (sent > 0)
+                {
+                    ClientSocket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(this.OnClientReceive), ClientSocket);
+                    return;
+                }
             }
             catch
             {
                 Dispose();
             }
         }
-        ///<summary>Called when we have sent data to the remote host.<br>When all the data has been sent, we will start receiving again from the local client.</br></summary>
-        ///<param name="ar">The result of the asynchronous operation.</param>
-        protected void OnRemoteSent(IAsyncResult ar)
-        {
-            try
-            {
-                int Ret = DestinationSocket.EndSend(ar);
-                if (Ret > 0)
-                {
-                    ClientSocket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(this.OnClientReceive), ClientSocket);
-                    return;
-                }
-            }
-            catch { }
-            Dispose(); 
-        }
+       
     }
 }
