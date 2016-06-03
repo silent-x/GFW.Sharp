@@ -41,9 +41,9 @@ namespace GFW.Sharp.Core.Forward.Transparent
                     Dispose();
                     return;
                 }
-                Logger.WriteSocketToFile(ClientSocket, _buffer, 0, Ret,false);
+                //Logger.WriteSocketToFile(ClientSocket, _buffer, 0, Ret,false);
                 int sent = DestinationSocket.Send(_buffer, 0, Ret, SocketFlags.None);
-                Logger.WriteSocketToFile(DestinationSocket, _buffer, 0, Ret,true);
+                //Logger.WriteSocketToFile(DestinationSocket, _buffer, 0, Ret,true);
                 if (sent > 0)
                 {
                     ClientSocket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(this.OnClientReceive), ClientSocket);

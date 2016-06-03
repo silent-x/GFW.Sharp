@@ -1,4 +1,5 @@
 ﻿using GFW.Sharp.Core.Ciphering;
+using GFW.Sharp.Core.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,11 +45,11 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                 byte[] recv = new byte[Ret];
                 System.Array.Copy(_buffer, 0, recv, 0, recv.Length);
                 //byte[] encrypt = recv;
-
+                Logger.ThreadWrite("sending bytes:\t" + recv.Length);
                 byte[] encrypt = _aes.encryptNet(_key, recv);
                 recv = null;
 
-                DestinationSocket.Send(encrypt);
+                DestinationSocket.Send(encrypt,0,encrypt.Length,SocketFlags.None);
                 ClientSocket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(this.OnClientReceive), ClientSocket);
                 encrypt = null;
             }

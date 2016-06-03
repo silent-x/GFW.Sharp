@@ -88,7 +88,7 @@ namespace GFW.Sharp.Core.Forward
         public override void Dispose()
         {
             base.Dispose();
-            if(forwarderTx != null)
+            if (forwarderTx != null)
             {
                 forwarderTx.Dispose();
             }
@@ -96,7 +96,7 @@ namespace GFW.Sharp.Core.Forward
             {
                 forwarderRx.Dispose();
             }
-            
+
         }
     }
 }

@@ -65,7 +65,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                     return;
                 }
                 int[] sizes = _aes.getBlockSizes(size_bytes);
-                if (sizes == null || sizes.Length != 2 || sizes[0] > 1024 * 768)
+                if (sizes == null || sizes.Length != 2 )
                 {
                     Dispose();
                     return;
@@ -81,7 +81,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                 while (read_count < size_count)
                 {
 
-                    read_num = ClientSocket.Receive(buffer, read_count, size_count - read_count,SocketFlags.None);
+                    read_num = ClientSocket.Receive(buffer, read_count, size_count - read_count, SocketFlags.None);
 
                     if (read_num == 0)
                     {
@@ -109,7 +109,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                     System.Array.Copy(buffer, 0, realdataBuffer, 0, realdataBuffer.Length);
 
                     decrypt_bytes = _aes.decrypt(_key, realdataBuffer);
-
+                    
                 }
                 else
                 {
@@ -117,14 +117,14 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                     decrypt_bytes = _aes.decrypt(_key, buffer);
 
                 }
-
-                if(decrypt_bytes==null)
+                Logger.ThreadWrite("got bytes:\t" + decrypt_bytes.Length);
+                if (decrypt_bytes==null)
                 {
                     Dispose();
                     return;
                 }
 
-                DestinationSocket.Send(decrypt_bytes);
+                DestinationSocket.Send(decrypt_bytes, 0, decrypt_bytes.Length, SocketFlags.None);
 
                 ClientSocket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(this.OnClientReceive), ClientSocket);
                 decrypt_bytes = null;
