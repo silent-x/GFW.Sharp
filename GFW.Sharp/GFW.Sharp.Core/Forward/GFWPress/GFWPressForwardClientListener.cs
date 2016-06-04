@@ -21,7 +21,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
 
         public override Forwarder GetInputToOutputForwarder(Socket inputSocket, Socket outputSocket)
         {
-            return new TransparentForwarder(inputSocket, RemoveClient, outputSocket);
+            return new GFWPressEncryptAsyncForwarder(inputSocket, RemoveClient, outputSocket, _key);
         }
 
         public override Forwarder GetOutputToInputForwarder(Socket outputSocket, Socket inputSocket)

@@ -4,15 +4,20 @@ using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GFW.Sharp.Core.Util
 {
     public class Logger
     {
+        private static object _lock = new object();
         public static void ThreadWrite(string message)
         {
-            Console.WriteLine(string.Format("{0}:Thd-{2}\t{1}", DateTime.Now.TimeOfDay, message,System.Threading.Thread.CurrentThread.ManagedThreadId));
+            lock (_lock)
+            {
+                Console.WriteLine(string.Format("{0}:Thd-{2}\t{1}", DateTime.Now.TimeOfDay, message, System.Threading.Thread.CurrentThread.ManagedThreadId));
+            }
         }
 
         public static void Write(string message)

@@ -33,7 +33,7 @@ namespace GFW.Sharp.Core.Forward
         {
             this.ClientSocket = ClientSocket;
             this.Destroyer = Destroyer;
-            _buffer = new byte[256 * 1024];
+            _buffer = new byte[32 * 1024];
         }
         ///<summary>Initializes a new instance of the Client object.</summary>
         ///<remarks>Both the ClientSocket property and the DestroyDelegate are initialized to null.</remarks>
@@ -41,7 +41,7 @@ namespace GFW.Sharp.Core.Forward
         {
             this.ClientSocket = null;
             this.Destroyer = null;
-            _buffer = new byte[256 * 1024];
+            _buffer = new byte[32 * 1024];
         }
         ///<summary>Gets or sets the Socket connection between the proxy server and the local client.</summary>
         ///<value>A Socket instance defining the connection between the proxy server and the local client.</value>
