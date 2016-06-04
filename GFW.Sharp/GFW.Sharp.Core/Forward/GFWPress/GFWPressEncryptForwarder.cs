@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
+
 
 namespace GFW.Sharp.Core.Forward.GFWPress
 {
@@ -21,8 +21,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
         }
         public override void StartForward()
         {
-            new Task(new Action(() =>
-            {
+            System.Threading.ThreadPool.QueueUserWorkItem((o) => {
                 const int BUFFER_SIZE_MIN = 1024 * 128; // 缓冲区最小值，128K
 
 
@@ -134,7 +133,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
 
 
 
-            })).Start();
+            },null);
         }
 
     }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
+
 
 namespace GFW.Sharp.Core.Forward.GFWPress
 {
@@ -20,7 +20,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
         }
         public override void StartForward()
         {
-            new Task(new Action(() => {
+            System.Threading.ThreadPool.QueueUserWorkItem((o) => {
                 byte[] buffer = null;
 
                 byte[] size_bytes = null;
@@ -189,7 +189,7 @@ namespace GFW.Sharp.Core.Forward.GFWPress
                 decrypt_bytes = null;
                 
 
-            })).Start();
+            },null);
         }
         
     }
