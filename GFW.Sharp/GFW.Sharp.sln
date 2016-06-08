@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFW.Sharp.Test", "GFW.Sharp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFW.Sharp.Console", "GFW.Sharp.Console\GFW.Sharp.Console.csproj", "{51D7C9F9-0E58-4B34-B446-17FC20EF2211}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFW.Sharp.Lite", "GFW.Sharp.Lite\GFW.Sharp.Lite.csproj", "{5C1B6220-E92C-4CA8-B390-36E835A4901A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{51D7C9F9-0E58-4B34-B446-17FC20EF2211}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51D7C9F9-0E58-4B34-B446-17FC20EF2211}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51D7C9F9-0E58-4B34-B446-17FC20EF2211}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C1B6220-E92C-4CA8-B390-36E835A4901A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C1B6220-E92C-4CA8-B390-36E835A4901A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C1B6220-E92C-4CA8-B390-36E835A4901A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C1B6220-E92C-4CA8-B390-36E835A4901A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
