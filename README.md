@@ -8,10 +8,14 @@ ps:因为Java不会。。。<br />
 Win7以上应该可以直接运行，linux下先要安装mono-complete。<br/>
 <br/>
 <br/>
-Ubuntu 16.04:<br/>
+Ubuntu 14.04\16.04:<br/>
 apt-get install mono-complete<br/>
 <br/>
-mono GFW.Sharp.Console<br/>
+cd GFW.Sharp.Lite<br/>
+xbuild ./GFW.Sharp.Lite.csproj<br/>
+<br/>
+在bin/Debug里面就有exe了<br/>
+GFW.Sharp.Lite.exe
 <br/>
 GFW.Sharp, a c# port of gfw.press. Thanks to @chinashiyu.
 Parameters:
